@@ -1,20 +1,16 @@
-const mongoose = require('mongoose');
 const express = require('express');
+const db = require("./config/connection");
+const routes = require("./routes");
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.statis('public'));
+app.use(routes);
 
-app.use(require('./routes'));
-
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/social-network-api', {
-    userNewUrlParser: true,
-    useUnifiedTopology: true
+db.once("open", () => {
+    app.listen(PORT, () => {
+        console.log('Server running on port ${PORT}');
+    });
 });
-
-mongoose.set('debug', true);
-app.listen(PORT, () => console.log(`Connected on localhost:${PORT}`));
-

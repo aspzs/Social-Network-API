@@ -1,6 +1,7 @@
-const addDateSuffix = date => {
+const addDateSuffix = (date) => {
     let dateStr =date.toString();
 
+    //Getting last char of dateString
     const lastChar = dateStr.charAt(dateStr.length - 1);
 
     if(lastChar === '1' && dateStr !== '11'){
@@ -57,27 +58,20 @@ module.exports = (
     const dateObj = new Date(timeStamp);
     const formattedMonth = months[dateObj.getMonth()];
 
-    let dayOfMonth;
-
-    if(dateSuffix) {
-        dayOfMonth = addDateSuffix(dateObj.getDate());
-    } else {
-        dayOfMonth = dateObj.getDate();
-    }
+    const dayOfMonth = dateSuffix ? addDateSuffix(dateObj.getDate()) : dateObj.getDate();
 
     const year = dateObj.getFullYear();
 
-    let hour;
-    if (dateObj.getHours > 12) {
-        hour = Math.floor(dateObj.getHours() / 2)
-    } else {
-        hour = dateObj.getHours();
-    }
+    let hour = dateObj.getHours() > 12 ? Math.floor(dateObj.getHours() -12) : dateObj.getHours();
+
     if (hour === 0) {
         hour = 12;
     }
 
-    const minutes = dateObj.getMinutes();
+    const minutes = (dateObj.getMinutes() < 10 ? '0' : '') + dateObj.getMinutes();
+
+    //Set am or pm
+
     let periodOfDay;
 
     if(dateObj.getHours() >= 12){
